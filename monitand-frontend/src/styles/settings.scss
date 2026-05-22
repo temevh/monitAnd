@@ -4,7 +4,24 @@
  * Configures SASS variables and Vuetify overwrites
  */
 
-// https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+// 1. @forward rules must always sit at the absolute top of the file
+@forward "vuetify/settings" with (
+  $body-font-family: (
+    "Pixelify Sans",
+    sans-serif,
+  ),
+  $heading-font-family: (
+    "Pixelify Sans",
+    sans-serif,
+  )
+);
+
+// 2. Custom CSS font definitions go below imports
+@font-face {
+  font-family: "Pixelify Sans";
+  src: url("@/assets/fonts/PixelifySans-VariableFont_wght.ttf")
+    format("truetype-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
