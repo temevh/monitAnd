@@ -1,0 +1,4 @@
+.ruler
+/node_modules
+.env
+AGENTS.md
