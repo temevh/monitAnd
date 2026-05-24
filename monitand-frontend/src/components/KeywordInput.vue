@@ -1,5 +1,13 @@
 <script setup lang="ts">
 const keyword = defineModel<string>("keyword", { required: true });
+
+function handleSearch() {
+  if (!keyword.value || keyword.value.trim() === "") {
+    return;
+  }
+
+  console.log("Searching: ", keyword.value);
+}
 </script>
 
 <template>
@@ -13,12 +21,15 @@ const keyword = defineModel<string>("keyword", { required: true });
         class="custom-glow-input"
         hide-details
         v-model="keyword"
+        :append-inner-icon="keyword.length > 0 ? 'mdi-magnify' : undefined"
+        @click:append-inner="handleSearch"
+        @keydown.enter="handleSearch"
+        type="text"
       >
       </v-text-field>
     </div>
   </v-container>
 </template>
-
 <style scoped>
 .glow-wrapper {
   width: 100%;
