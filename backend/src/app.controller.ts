@@ -10,9 +10,9 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Post()
+  @Post('keyword')
   @HttpCode(200)
   postKeyword(@Body('keyword') keyword: string) {
-    return this.appService.getKeyword(keyword);
+    return { message: this.appService.getKeyword(keyword) };
   }
 }

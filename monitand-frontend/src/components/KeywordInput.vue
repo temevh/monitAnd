@@ -1,12 +1,13 @@
 <script setup lang="ts">
   const keyword = defineModel<string>('keyword', { required: true })
+  const emit = defineEmits<{ (e: 'search-pressed'): void }>()
 
   function handleSearch () {
     if (!keyword.value || keyword.value.trim() === '') {
       return
     }
 
-    console.log('Searching:', keyword.value)
+    emit('search-pressed')
   }
 </script>
 
