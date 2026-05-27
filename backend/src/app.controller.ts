@@ -1,9 +1,13 @@
 import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+import { NewsService } from './services/news.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly newsService: NewsService,
+  ) {}
 
   @Get()
   getHello(): string {
@@ -13,6 +17,6 @@ export class AppController {
   @Post('keyword')
   @HttpCode(200)
   postKeyword(@Body('keyword') keyword: string) {
-    return { message: this.appService.getKeyword(keyword) };
+    return { message: this.newsService.getNews(keyword) };
   }
 }

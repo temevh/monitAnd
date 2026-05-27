@@ -1,18 +1,28 @@
+version: "3.8"
+
 services:
-  vuejs-dev:
+  backend:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: nestjs_backend
     ports:
-      - "5173:5173"
-    develop:
-      watch:
-        - path: ./src
-          target: /app/src
-          action: sync
-        - path: ./package.json
-          target: /app/package.json
-          action: restart
-        - path: ./vite.config.js
-          target: /app/vite.config.js
-          action: restart
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: vue_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
