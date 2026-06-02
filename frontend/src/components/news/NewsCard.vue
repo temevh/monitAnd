@@ -1,91 +1,83 @@
 <script setup lang="ts">
   import type { News } from '@/types'
-  import { COLORS, SHADOWS } from '@/styles' // 1. Import our design system tokens
+  import { COLORS } from '@/styles'
   import { formatTime } from '@/utils/formatTime'
 
-  const props = defineProps<News>()
+  const props = defineProps<News & { sentiment?: 'positive' | 'negative' | 'neutral' }>()
 </script>
 
 <template>
   <v-card
-    class="mx-auto news-card transition-swing rounded-0"
-    density="comfortable"
-    max-width="400"
+    class="news-card rounded-0 px-3 pb-4"
     :style="{
       backgroundColor: COLORS.cardBackground,
-      color: COLORS.textDark,
-      boxShadow: SHADOWS.subtle
+      color: 'white'
     }"
     variant="flat"
   >
-    <v-card-item class="pt-4 pb-1">
-      <div
-        class="d-flex justify-space-between align-center text-caption font-weight-medium"
-        :style="{ color: COLORS.textMuted }"
-      >
-        <span class="text-truncate mr-4">
-          <v-icon class="mr-1" icon="mdi-newspaper-variant" size="x-small" />
-          {{ props.source }} <span class="mx-1">•</span> {{ props.author || 'Anonymous' }}
-        </span>
+    <div class="d-flex align-center justify-space-between w-100">
+      <div class="d-flex flex-column text-left mr-4 overflow-hidden">
+        <h3 class="text-body-1 font-weight-bold mb-2">
+          <a
+            class="custom-news-link"
+            :href="props.url"
+            target="_blank"
+          >
+            {{ props.title }}
+          </a>
+        </h3>
 
-        <span v-if="props.date" class="text-no-wrap">
-          {{ formatTime(props.date, "eu") }}
-        </span>
+        <div class="metadata-row">
+          <span class="source-tag">{{ props.source }}</span>
+          <span>{{ props.date ? formatTime(props.date, "eu") : '2h ago' }}</span>
+
+        </div>
       </div>
-    </v-card-item>
-
-    <v-card-text class="pt-1 pb-4">
-      <h3 class="text-h6 font-weight-bold line-clamp-3 mb-1">
-        <a
-          class="custom-news-link"
-          :href="props.url"
-          :style="{ '--link-color': 'white', '--link-hover': COLORS.primary }"
-          target="_blank"
-        >
-          {{ props.title }}
-          <v-icon class="ml-1 icon-redirect" icon="mdi-open-in-new" size="x-small" />
-        </a>
-      </h3>
-    </v-card-text>
+    </div>
   </v-card>
 </template>
 
 <style scoped>
 .news-card {
-  border: 4px solid v-bind('COLORS.cardBorder');
+  border: 2px solid v-bind('COLORS.cardBorder');
 }
 
 .news-card:hover {
-  box-shadow: v-bind('SHADOWS.hover') !important;
-  border: 4px solid v-bind('COLORS.primary');
+  border: 2px solid v-bind('COLORS.primary');
+}
+
+.metadata-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: v-bind('COLORS.textMuted');
+  letter-spacing: 0.5px;
+}
+
+.source-tag {
+  font-weight: 700;
+}
+
+.views-tag {
+  display: flex;
+  align-items: center;
 }
 
 .custom-news-link {
-  color: var(--link-color);
+  color: #ffffff;
   text-decoration: none;
-  transition: color 0.2s ease;
   line-height: 1.4;
-  display: inline;
-}
-
-.custom-news-link:hover {
-  color: var(--link-hover);
-}
-
-.icon-redirect {
-  transition: transform 0.2s ease;
-  opacity: 0.7;
-}
-.custom-news-link:hover .icon-redirect {
-  transform: translate(1px, -1px);
-  opacity: 1;
-}
-
-/* Elegant multi-line containment */
-.line-clamp-3 {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.custom-news-link:hover {
+  color: v-bind('COLORS.primary');
+}
+
 </style>
