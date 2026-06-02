@@ -1,7 +1,10 @@
 <script setup lang="ts">
+  import type { News } from '@/types.ts'
   import { ref } from 'vue'
   import KeywordInput from './KeywordInput.vue'
+  import NewsList from './news/NewsList.vue'
   const keyword = ref<string>('')
+  const newsList = ref<News[]>([])
 
   async function searchPressed () {
     if (!keyword.value || keyword.value.trim() === '') {
@@ -21,7 +24,14 @@
 
       if (response.status === 200) {
         const data = await response.json()
-        console.log(data)
+        newsList.value = data.message
+        console.group('📰 API Fetch Successful')
+        console.log('Raw JSON Response Payload:', data)
+        console.log('Type of response body:', typeof data)
+
+        console.log('Formatted News Array View:')
+        console.table(data.message)
+        console.groupEnd()
       } else {
         console.error('Server error', response.status)
       }
@@ -32,5 +42,6 @@
 </script>
 
 <template>
-  <KeywordInput v-model:keyword="keyword" @search-pressed="searchPressed" />
+  <KeywordInput v-if="newsList.length === 0" v-model:keyword="keyword" @search-pressed="searchPressed" />
+  <NewsList :news="newsList" />
 </template>

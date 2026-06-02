@@ -21,16 +21,18 @@ export class NewsService {
       const response = await firstValueFrom(this.httpService.get(url));
 
       const articles = response.data.articles || [];
+      console.log(articles);
 
       const formattedNews: News[] = articles.map((article: any) => ({
         title: article.title,
-        // 3. Added '?' optional chaining and a fallback string to prevent crashes
         source: article.source?.name || 'Unknown Source',
         url: article.url,
         date: article.publishedAt,
+        content: article.content,
+        author: article.author,
       }));
 
-      console.log(formattedNews);
+      //console.log(formattedNews);
       return formattedNews;
     } catch (error) {
       console.error('Failed to fetch news:', error.message);

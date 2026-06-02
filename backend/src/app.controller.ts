@@ -16,7 +16,8 @@ export class AppController {
 
   @Post('keyword')
   @HttpCode(200)
-  postKeyword(@Body('keyword') keyword: string) {
-    return { message: this.newsService.getNews(keyword) };
+  async postKeyword(@Body('keyword') keyword: string) {
+    const newsData = await this.newsService.getNews(keyword);
+    return { message: newsData };
   }
 }
