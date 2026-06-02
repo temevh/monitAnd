@@ -1,57 +1,98 @@
 <script setup lang="ts">
   import type { News } from '@/types'
-  import { computed, ref } from 'vue'
+  import { COLORS, SHADOWS } from '@/styles' // 1. Import our design system tokens
+  import { formatTime } from '@/utils/formatTime'
+
   const props = defineProps<News>()
-
-  const isExpanded = ref(false)
-
-  const contentPreview = computed(() => {
-    if (props.content?.length > 120) {
-      return props.content?.slice(0, 120) + '...'
-    }
-
-    return props.content
-  })
-
 </script>
 
 <template>
-  <v-card class="mx-auto my-2" density="compact" max-width="600" variant="outlined">
-    <v-card-item class="pb-0">
-      <div class="d-flex justify-space-between align-center text-caption text-medium-emphasis">
-        <span>{{ props.source }} • {{ props.author || 'Anonymous' }}</span>
-        <span v-if="props.date">{{ props.date }}</span>
+  <v-card
+    class="mx-auto news-card transition-swing"
+    density="comfortable"
+    max-width="400"
+    :style="{
+      backgroundColor: COLORS.bgLight,
+      color: COLORS.textDark,
+      boxShadow: SHADOWS.subtle
+    }"
+    variant="flat"
+  >
+    <v-card-item class="pt-4 pb-1">
+      <div
+        class="d-flex justify-space-between align-center text-caption font-weight-medium"
+        :style="{ color: COLORS.textMuted }"
+      >
+        <span class="text-truncate mr-4">
+          <v-icon class="mr-1" icon="mdi-newspaper-variant" size="x-small" />
+          {{ props.source }} <span class="mx-1">•</span> {{ props.author || 'Anonymous' }}
+        </span>
+
+        <span v-if="props.date" class="text-no-wrap">
+          {{ formatTime(props.date, "eu") }}
+        </span>
       </div>
     </v-card-item>
 
-    <v-card-title class="pt-1 text-subtitle-1 font-weight-bold text-wrap line-clamp-2">
-      <a class="text-decoration-none text-primary" :href="props.url" target="_blank">
-        {{ props.title }}
-        <v-icon class="ml-1" icon="mdi-open-in-new" size="x-small" />
-      </a>
-    </v-card-title>
-
-    <v-card-text class="text-body-2 pb-2">
-      {{ isExpanded ? props.content : contentPreview }}
+    <v-card-text class="pt-1 pb-4">
+      <h3 class="text-h6 font-weight-bold line-clamp-3 mb-1">
+        <a
+          class="custom-news-link"
+          :href="props.url"
+          :style="{ '--link-color': COLORS.primary, '--link-hover': COLORS.accent }"
+          target="_blank"
+        >
+          {{ props.title }}
+          <v-icon class="ml-1 icon-redirect" icon="mdi-open-in-new" size="x-small" />
+        </a>
+      </h3>
     </v-card-text>
-
-    <v-card-actions class="pt-0 justify-end">
-      <v-btn
-        color="secondary"
-        density="compact"
-        :icon="isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-        variant="text"
-        @click="isExpanded = !isExpanded"
-      />
-    </v-card-actions>
   </v-card>
 </template>
 
 <style scoped>
-.line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+/* 2. Custom styles for deep UX polish */
+.news-card {
+  border: 1px solid v-bind('COLORS.borderLight');
+  border-radius: 12px !important; /* Slightly rounder look */
+  transition: all 0.25s ease-in-out !important;
+}
+
+/* Card lift-effect on hover */
+.news-card:hover {
+  transform: translateY(-2px);
+  box-shadow: v-bind('SHADOWS.hover') !important;
+  background-color: v-bind('COLORS.bgHover') !important;
+}
+
+/* Clean title anchor link configurations */
+.custom-news-link {
+  color: var(--link-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  line-height: 1.4;
+  display: inline;
+}
+
+.custom-news-link:hover {
+  color: var(--link-hover);
+}
+
+/* Make redirect icon react nicely when hovering the link */
+.icon-redirect {
+  transition: transform 0.2s ease;
+  opacity: 0.7;
+}
+.custom-news-link:hover .icon-redirect {
+  transform: translate(1px, -1px);
+  opacity: 1;
+}
+
+/* Elegant multi-line containment */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>

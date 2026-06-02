@@ -6,6 +6,25 @@ import { ConfigService } from '@nestjs/config';
 
 //News API documentation https://newsapi.org/docs/get-started#search
 
+interface NewsApiArticle {
+  title: string;
+  source?: {
+    id: string | null;
+    name: string;
+  };
+  url: string;
+  publishedAt: string;
+  content: string;
+  author: string | null;
+}
+
+// 1. Define the shape of the top-level response payload returned by NewsAPI
+interface NewsApiResponse {
+  status: string;
+  totalResults: number;
+  articles: NewsApiArticle[];
+}
+
 @Injectable()
 export class NewsService {
   constructor(
@@ -18,24 +37,28 @@ export class NewsService {
     const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(keyword)}&from=2026-05-27&sortBy=popularity&pageSize=10&apiKey=${apiKey}`;
 
     try {
-      const response = await firstValueFrom(this.httpService.get(url));
+      const response = await firstValueFrom(
+        this.httpService.get<NewsApiResponse>(url),
+      );
 
       const articles = response.data.articles || [];
       console.log(articles);
 
-      const formattedNews: News[] = articles.map((article: any) => ({
+      const formattedNews: News[] = articles.map((article: NewsApiArticle) => ({
         title: article.title,
         source: article.source?.name || 'Unknown Source',
         url: article.url,
         date: article.publishedAt,
         content: article.content,
-        author: article.author,
+        author: article.author || 'Anonymous',
       }));
 
-      //console.log(formattedNews);
       return formattedNews;
-    } catch (error) {
-      console.error('Failed to fetch news:', error.message);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown network failure';
+
+      console.error('Failed to fetch news:', errorMessage);
       throw error;
     }
   }

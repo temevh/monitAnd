@@ -43,5 +43,5 @@
 
 <template>
   <KeywordInput v-if="newsList.length === 0" v-model:keyword="keyword" @search-pressed="searchPressed" />
-  <NewsList :news="newsList" />
+  <NewsList v-if="newsList.length > 0 " :news="newsList" />
 </template>
