@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { COLORS } from '@/styles'
   const keyword = defineModel<string>('keyword', { required: true })
   const emit = defineEmits<{ (e: 'search-pressed'): void }>()
 
@@ -50,6 +51,6 @@
 }
 
 .custom-glow-input :deep(.v-field--focused) {
-  box-shadow: 0 0 200px rgb(238, 158, 11) !important;
+  box-shadow: 0 0 400px v-bind('COLORS.primary') !important;
 }
 </style>

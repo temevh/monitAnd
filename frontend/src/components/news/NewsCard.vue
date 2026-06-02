@@ -8,11 +8,11 @@
 
 <template>
   <v-card
-    class="mx-auto news-card transition-swing"
+    class="mx-auto news-card transition-swing rounded-0"
     density="comfortable"
     max-width="400"
     :style="{
-      backgroundColor: COLORS.bgLight,
+      backgroundColor: COLORS.cardBackground,
       color: COLORS.textDark,
       boxShadow: SHADOWS.subtle
     }"
@@ -39,7 +39,7 @@
         <a
           class="custom-news-link"
           :href="props.url"
-          :style="{ '--link-color': COLORS.primary, '--link-hover': COLORS.accent }"
+          :style="{ '--link-color': 'white', '--link-hover': COLORS.primary }"
           target="_blank"
         >
           {{ props.title }}
@@ -51,21 +51,15 @@
 </template>
 
 <style scoped>
-/* 2. Custom styles for deep UX polish */
 .news-card {
-  border: 1px solid v-bind('COLORS.borderLight');
-  border-radius: 12px !important; /* Slightly rounder look */
-  transition: all 0.25s ease-in-out !important;
+  border: 4px solid v-bind('COLORS.cardBorder');
 }
 
-/* Card lift-effect on hover */
 .news-card:hover {
-  transform: translateY(-2px);
   box-shadow: v-bind('SHADOWS.hover') !important;
-  background-color: v-bind('COLORS.bgHover') !important;
+  border: 4px solid v-bind('COLORS.primary');
 }
 
-/* Clean title anchor link configurations */
 .custom-news-link {
   color: var(--link-color);
   text-decoration: none;
@@ -78,7 +72,6 @@
   color: var(--link-hover);
 }
 
-/* Make redirect icon react nicely when hovering the link */
 .icon-redirect {
   transition: transform 0.2s ease;
   opacity: 0.7;

@@ -1,20 +1,18 @@
 // src/styles.ts
 
 export const COLORS = {
-  // Light Gray Backgrounds
-  bgLight: '#F8F9FA', // Soft, neutral light gray for cards
-  bgHover: '#F1F3F5', // Slightly darker gray for hover states
+  background: '#0a0e1a',
 
-  // Brand / Accents
-  primary: '#2B3A67', // Deep Navy instead of generic bright blue/indigo
-  accent: '#E65F2B', // Warm coral/orange for micro-interactions
+  cardBackground: '#141824',
+  cardBorder: '#2a3347',
 
-  // Typography Neutrality
-  textDark: '#212529', // Off-black for crisp, soft readability
-  textMuted: '#6C757D', // Cool gray for metadata/author text
+  primary: '#00ff9d',
+  secondary: '#E65F2B',
 
-  // Borders
-  borderLight: '#E9ECEF', // Very subtle line divider color
+  textDark: '#212529',
+  textMuted: '#6C757D',
+
+  borderLight: '#E9ECEF',
 }
 
 export const SHADOWS = {

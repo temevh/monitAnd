@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { News } from '@/types.ts'
   import { ref } from 'vue'
+  import { COLORS } from '@/styles.ts'
   import KeywordInput from './KeywordInput.vue'
   import NewsList from './news/NewsList.vue'
   const keyword = ref<string>('')
@@ -43,5 +44,27 @@
 
 <template>
   <KeywordInput v-if="newsList.length === 0" v-model:keyword="keyword" @search-pressed="searchPressed" />
-  <NewsList v-if="newsList.length > 0 " :news="newsList" />
-</template>
+
+  <v-container v-if="keyword.length > 0" id="contentDiv">
+    <h1 class="keyword-header">{{ keyword }}</h1>
+
+    <v-row>
+      <v-col
+        v-for="n in 4"
+        :key="n"
+        cols="12"
+        lg="6"
+        md="6"
+        sm="12"
+      >
+        <NewsList :news="newsList" />
+      </v-col>
+    </v-row>
+  </v-container></template>
+
+<style scoped>
+.keyword-header {
+  justify-self:center;
+}
+
+</style>
