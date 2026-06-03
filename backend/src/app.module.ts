@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { NewsService } from './services/news.service';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
+import { RedditService } from './services/reddit.service';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { ConfigModule } from '@nestjs/config';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, NewsService],
+  providers: [AppService, NewsService, RedditService],
 })
 export class AppModule {}

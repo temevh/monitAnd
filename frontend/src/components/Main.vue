@@ -25,14 +25,10 @@
 
       if (response.status === 200) {
         const data = await response.json()
-        newsList.value = data.message
-        console.group('📰 API Fetch Successful')
+        newsList.value = data.message.newsData
         console.log('Raw JSON Response Payload:', data)
         console.log('Type of response body:', typeof data)
-
-        console.log('Formatted News Array View:')
-        console.table(data.message)
-        console.groupEnd()
+        console.log(data.message)
       } else {
         console.error('Server error', response.status)
       }

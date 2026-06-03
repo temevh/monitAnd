@@ -18,7 +18,6 @@ interface NewsApiArticle {
   author: string | null;
 }
 
-// 1. Define the shape of the top-level response payload returned by NewsAPI
 interface NewsApiResponse {
   status: string;
   totalResults: number;
@@ -42,7 +41,6 @@ export class NewsService {
       );
 
       const articles = response.data.articles || [];
-      console.log(articles);
 
       const formattedNews: News[] = articles.map((article: NewsApiArticle) => ({
         title: article.title,
