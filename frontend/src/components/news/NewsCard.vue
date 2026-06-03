@@ -3,7 +3,7 @@
   import { COLORS } from '@/styles'
   import { formatTime } from '@/utils/formatTime'
 
-  const props = defineProps<News & { sentiment?: 'positive' | 'negative' | 'neutral' }>()
+  const props = defineProps<News>()
 </script>
 
 <template>
@@ -28,6 +28,7 @@
         </h3>
 
         <div class="metadata-row">
+          <p>from</p>
           <span class="source-tag">{{ props.source }}</span>
           <span>{{ formatTime(props.date, "eu") }}</span>
 
@@ -54,7 +55,7 @@
   font-weight: 500;
   text-transform: uppercase;
   color: v-bind('COLORS.textMuted');
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 .source-tag {

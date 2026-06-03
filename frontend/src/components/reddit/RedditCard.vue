@@ -28,7 +28,11 @@
         </h3>
 
         <div class="metadata-row">
-          <span class="source-tag">{{ props.subreddit }}</span>
+          <p>by</p>
+          <a class="source-tag" :href="`https://www.reddit.com/${props.author }`" target="_blank">{{ props.author }}</a>
+          <p>in</p>
+          <a class="source-tag" :href="`https://www.reddit.com/${props.subreddit }`" target="_blank">{{ props.subreddit }}</a>
+          <p>on</p>
           <span>{{ formatTime(props.date, "eu") }}</span>
 
         </div>
@@ -46,15 +50,22 @@
   border: 2px solid v-bind('COLORS.primary');
 }
 
+a:hover{
+    color: v-bind('COLORS.primary')
+}
+
+p{
+    text-transform: uppercase;
+}
+
 .metadata-row {
   display: flex;
   align-items: center;
   gap: 12px;
   font-size: 0.75rem;
   font-weight: 500;
-  text-transform: uppercase;
   color: v-bind('COLORS.textMuted');
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 .source-tag {
