@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import type { News } from '@/types'
+  import type { RedditPost } from '@/types'
   import { COLORS } from '@/styles'
   import { formatTime } from '@/utils/formatTime'
 
-  const props = defineProps<News & { sentiment?: 'positive' | 'negative' | 'neutral' }>()
+  const props = defineProps<RedditPost>()
 </script>
 
 <template>
@@ -20,7 +20,7 @@
         <h3 class="text-body-1 font-weight-bold mb-2">
           <a
             class="custom-news-link"
-            :href="props.url"
+            :href="props.link"
             target="_blank"
           >
             {{ props.title }}
@@ -28,7 +28,7 @@
         </h3>
 
         <div class="metadata-row">
-          <span class="source-tag">{{ props.source }}</span>
+          <span class="source-tag">{{ props.subreddit }}</span>
           <span>{{ formatTime(props.date, "eu") }}</span>
 
         </div>

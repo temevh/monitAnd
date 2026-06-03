@@ -6,3 +6,11 @@ export type News = {
   date: string
   content?: string
 }
+
+export type RedditPost = {
+  title: string
+  link: string
+  author: string
+  subreddit: string
+  date: string
+}

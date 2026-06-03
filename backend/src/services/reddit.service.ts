@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { RedditPost } from 'src/types';
+import { RedditPost } from '../types';
 import { firstValueFrom } from 'rxjs';
 import Parser from 'rss-parser';
 
@@ -17,7 +17,6 @@ interface RedditRssItem {
 
 @Injectable()
 export class RedditService {
-  // Use Record<string, never> instead of any to satisfy strict ESLint rules for no-unsafe assignments
   private rssParser: Parser<Record<string, never>, RedditRssItem>;
 
   constructor(private readonly httpService: HttpService) {
@@ -37,12 +36,14 @@ export class RedditService {
       );
 
       const feed = await this.rssParser.parseString(response.data);
-      // Explicitly type items array or fallback to empty array safely
       const items: RedditRssItem[] = feed.items || [];
       console.log(items);
 
-      // Changed (post: RedditRssResponse) to (post: RedditRssItem)
-      const formattedPosts: RedditPost[] = items
+      const junkRemoved = items.filter((item) => {
+        return item.link.length > 60;
+      });
+
+      const formattedPosts: RedditPost[] = junkRemoved
         .slice(0, 10)
         .map((post: RedditRssItem): RedditPost => {
           const sub = post.link ? post.link.split('/')[4] : 'unknown';

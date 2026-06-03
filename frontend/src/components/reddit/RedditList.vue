@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import type { News } from '@/types'
-  import NewsCard from './NewsCard.vue'
+  import type { RedditPost } from '@/types'
+  import RedditCard from './RedditCard.vue'
 
-  const props = defineProps<{ news: News[] }>()
+  const props = defineProps<{ posts: RedditPost[] }>()
 </script>
 
 <template>
@@ -11,27 +11,26 @@
     <div class="header-container d-flex align-center px-4">
       <v-icon
         class="text-teal-accent-3 mr-2"
-        icon="mdi-newspaper-variant-outline"
+        icon="mdi-reddit"
         size="large"
       />
 
-      <h3 class="header-title">NEWS FEED</h3>
+      <h3 class="header-title">REDDIT FEED</h3>
     </div>
 
     <div class="pa-4">
       <v-row no-gutters>
         <v-col
-          v-for="(article, index) in props.news"
+          v-for="(article, index) in props.posts"
           :key="index"
           cols="12"
         >
-          <NewsCard
+          <RedditCard
             :author="article.author"
-            :content="article.content"
             :date="article.date"
-            :source="article.source"
+            :link="article.link"
+            :subreddit="article.subreddit"
             :title="article.title"
-            :url="article.url"
           />
         </v-col>
       </v-row>

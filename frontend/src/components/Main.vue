@@ -1,11 +1,13 @@
 <script setup lang="ts">
-  import type { News } from '@/types.ts'
+  import type { News, RedditPost } from '@/types.ts'
+
   import { ref } from 'vue'
-  import { COLORS } from '@/styles.ts'
   import KeywordInput from './KeywordInput.vue'
   import NewsList from './news/NewsList.vue'
+  import RedditList from './reddit/RedditList.vue'
   const keyword = ref<string>('')
   const newsList = ref<News[]>([])
+  const redditPosts = ref<RedditPost[]>([])
 
   async function searchPressed () {
     if (!keyword.value || keyword.value.trim() === '') {
@@ -26,6 +28,7 @@
       if (response.status === 200) {
         const data = await response.json()
         newsList.value = data.message.newsData
+        redditPosts.value = data.message.redditPosts
         console.log('Raw JSON Response Payload:', data)
         console.log('Type of response body:', typeof data)
         console.log(data.message)
@@ -46,14 +49,19 @@
 
     <v-row>
       <v-col
-        v-for="n in 4"
-        :key="n"
-        cols="12"
         lg="6"
         md="6"
         sm="12"
       >
         <NewsList :news="newsList" />
+      </v-col>
+
+      <v-col
+        lg="6"
+        md="6"
+        sm="12"
+      >
+        <RedditList :posts="redditPosts" />
       </v-col>
     </v-row>
   </v-container></template>

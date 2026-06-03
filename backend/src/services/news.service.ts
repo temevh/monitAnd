@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Request } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import { News } from 'src/types';
+import { News } from '../types';
 import { ConfigService } from '@nestjs/config';
 
 //News API documentation https://newsapi.org/docs/get-started#search
