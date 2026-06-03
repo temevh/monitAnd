@@ -15,4 +15,7 @@
 .global-styles{
   background-color: v-bind('COLORS.background');
 }
+a:hover{
+    color: v-bind('COLORS.primary')
+}
 </style>
