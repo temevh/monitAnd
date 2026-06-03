@@ -12,7 +12,7 @@
       <v-icon
         class="text-teal-accent-3 mr-2"
         icon="mdi-newspaper-variant-outline"
-        size="large"
+        size="x-large"
       />
 
       <h3 class="header-title">NEWS FEED</h3>

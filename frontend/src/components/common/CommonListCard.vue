@@ -36,6 +36,7 @@
   text-transform: uppercase;
   color: v-bind('COLORS.textMuted');
   letter-spacing: 1px;
+  line-height: 1.2;
 }
 
 :deep(.source-tag) {
@@ -45,7 +46,7 @@
 :deep(.title-link) {
   color: #ffffff;
   text-decoration: none;
-  line-height: 1.4;
+  line-height: 1.2;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -55,6 +56,10 @@
 
 :deep(.title-link:hover) {
   color: v-bind('COLORS.primary');
+}
+
+:deep(h3), :deep(h4) {
+  margin: 1% !important;
 }
 
 </style>

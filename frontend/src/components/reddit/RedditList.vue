@@ -10,9 +10,9 @@
   <CommonList>
     <template #header>
       <v-icon
-        class="text-teal-accent-3 mr-2"
+        class="text-red mr-2"
         icon="mdi-reddit"
-        size="large"
+        size="x-large"
       />
 
       <h3 class="header-title">REDDIT FEED</h3>
