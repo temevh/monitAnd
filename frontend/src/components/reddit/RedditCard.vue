@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import type { RedditPost } from '@/types'
   import { formatTime } from '@/utils/formatTime'
-  import ListCard from '../ui/ListCard.vue'
+  import CommonListCard from '../common/CommonListCard.vue'
 
   const props = defineProps<RedditPost>()
 </script>
 
 <template>
-  <list-card>
+  <CommonListCard>
     <template #content>
       <h3 class="text-body-1 font-weight-bold mb-2">
         <a
@@ -30,7 +30,7 @@
         <span>{{ formatTime(props.date, "eu") }}</span>
       </div>
     </template>
-  </list-card>
+  </CommonListCard>
 </template>
 
 <style scoped>

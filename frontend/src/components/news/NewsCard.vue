@@ -1,13 +1,12 @@
 <script setup lang="ts">
   import type { News } from '@/types'
   import { formatTime } from '@/utils/formatTime'
-  import ListCard from '../ui/ListCard.vue'
-
+  import CommonListCard from '../common/CommonListCard.vue'
   const props = defineProps<News>()
 </script>
 
 <template>
-  <list-card>
+  <CommonListCard>
     <template #content>
       <h3 class="text-body-1 font-weight-bold">
         <a
@@ -25,5 +24,5 @@
         <span class="source-tag">{{ props.source }}</span>
         <span>{{ formatTime(props.date, "eu") }}</span>
       </div></template>
-  </list-card>
+  </CommonListCard>
 </template>

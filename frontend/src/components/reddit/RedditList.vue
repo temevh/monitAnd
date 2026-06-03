@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import type { RedditPost } from '@/types'
+  import CommonList from '../common/CommonList.vue'
   import RedditCard from './RedditCard.vue'
 
   const props = defineProps<{ posts: RedditPost[] }>()
 </script>
 
 <template>
-  <div class="news-feed-wrapper">
-
-    <div class="header-container d-flex align-center px-4">
+  <CommonList>
+    <template #header>
       <v-icon
         class="text-teal-accent-3 mr-2"
         icon="mdi-reddit"
@@ -16,34 +16,30 @@
       />
 
       <h3 class="header-title">REDDIT FEED</h3>
-    </div>
+    </template>
 
-    <div class="pa-4">
-      <v-row no-gutters>
-        <v-col
-          v-for="(article, index) in props.posts"
-          :key="index"
-          cols="12"
-        >
-          <RedditCard
-            :author="article.author"
-            :date="article.date"
-            :link="article.link"
-            :subreddit="article.subreddit"
-            :title="article.title"
-          />
-        </v-col>
-      </v-row>
-    </div>
-
-  </div>
+    <template #content>
+      <v-col
+        v-for="(article, index) in props.posts"
+        :key="index"
+        cols="12"
+      >
+        <RedditCard
+          :author="article.author"
+          :date="article.date"
+          :link="article.link"
+          :subreddit="article.subreddit"
+          :title="article.title"
+        />
+      </v-col>
+    </template>
+  </CommonList>
 </template>
 
 <style scoped>
 .news-feed-wrapper {
-  /* Deep outer frame styling */
   background-color: #0f141c;
-  border: 1px solid #1e293b;
+  border: 4px solid #1e293b;
   width: 100%;
 }
 
