@@ -32,7 +32,3 @@
     </template>
   </CommonListCard>
 </template>
-
-<style scoped>
-
-</style>

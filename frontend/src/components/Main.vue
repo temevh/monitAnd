@@ -8,6 +8,7 @@
   const keyword = ref<string>('')
   const newsList = ref<News[]>([])
   const redditPosts = ref<RedditPost[]>([])
+  const hasData = ref(false)
 
   async function searchPressed () {
     if (!keyword.value || keyword.value.trim() === '') {
@@ -29,9 +30,7 @@
         const data = await response.json()
         newsList.value = data.message.newsData
         redditPosts.value = data.message.redditPosts
-        console.log('Raw JSON Response Payload:', data)
-        console.log('Type of response body:', typeof data)
-        console.log(data.message)
+        hasData.value = true
       } else {
         console.error('Server error', response.status)
       }
@@ -44,7 +43,7 @@
 <template>
   <KeywordInput v-if="newsList.length === 0" v-model:keyword="keyword" @search-pressed="searchPressed" />
 
-  <v-container v-if="keyword.length > 0" id="contentDiv">
+  <v-container v-if="hasData" id="contentDiv">
     <h1 class="keyword-header">{{ keyword }}</h1>
 
     <v-row>

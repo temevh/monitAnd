@@ -1,8 +1,9 @@
 <script setup lang="ts">
+  import { ref } from 'vue'
   import { COLORS } from '@/styles'
   const keyword = defineModel<string>('keyword', { required: true })
   const emit = defineEmits<{ (e: 'search-pressed'): void }>()
-
+  const expanded = ref(false)
   function handleSearch () {
     if (!keyword.value || keyword.value.trim() === '') {
       return
@@ -13,44 +14,123 @@
 </script>
 
 <template>
-  <v-container class="d-flex align-center justify-center fill-height">
-    <div class="glow-wrapper">
+  <v-container class="stable-landing-view d-flex flex-column align-center">
+    <div class="field-wrapper">
+      <p class="text-subtitle-1 text-grey-lighten-1 mb-1">Enter a keyword to start</p>
+
       <v-text-field
         v-model="keyword"
-        :append-inner-icon="keyword.length > 0 ? 'mdi-magnify' : undefined"
-        class="custom-glow-input"
-        density="default"
+        append-inner-icon="mdi-magnify"
+        class="keyword-input"
+        :class="{ 'has-input': keyword.length > 0 }"
         hide-details
-        placeholder="Search something..."
-        rounded="xl"
-        type="text"
-        variant="solo"
+        placeholder="Keyword"
         @click:append-inner="handleSearch"
         @keydown.enter="handleSearch"
       />
+
+      <div>
+        <v-btn class="settings-btn" rounded="xs" @click="expanded = !expanded">
+          Settings
+          <v-icon end icon="mdi-cog" />
+        </v-btn>
+      </div>
+    </div>
+
+    <div v-if="expanded" class="settings-div">
+      <p class="text-subtitle-2 font-weight-medium mb-3">Select sources to use</p>
+
+      <div class="checkboxes">
+        <v-checkbox
+          class="custom-checkbox"
+          density="comfortable"
+          hide-details
+          :style="{ color: COLORS.primary }"
+        >
+          <span class="checkbox-label">REDDIT</span>
+        </v-checkbox>
+
+        <v-checkbox
+          class="custom-checkbox"
+          density="comfortable"
+          hide-details
+          :style="{ color: COLORS.primary }"
+        >
+          <span class="checkbox-label">NEWS</span>
+        </v-checkbox>
+
+        <v-checkbox
+          class="custom-checkbox"
+          density="comfortable"
+          hide-details
+          :style="{ color: COLORS.primary }"
+        >
+          <span class="checkbox-label font-weight-bold">X / TWITTER</span>
+        </v-checkbox>
+      </div>
     </div>
   </v-container>
 </template>
+
 <style scoped>
-.glow-wrapper {
+.stable-landing-view {
+  min-height: 100vh;
+  padding-top: 25vh;
+}
+
+.keyword-input {
+  border: 4px solid v-bind('COLORS.primary');
+  font-size: 2rem;
   width: 100%;
-  max-width: 650px;
+}
+
+.keyword-input.has-input :deep(.v-field__append-inner) {
+  opacity: 1;
+}
+
+.settings-div {
+  background-color: v-bind('COLORS.cardBackground');
+  width: 100%;
+  max-width: 50rem;
   padding: 20px;
+  margin-top: 15px;
+  color: white;
 }
 
-.custom-glow-input :deep(.v-field) {
-  font-size: 1.75rem;
-  transition: box-shadow 0.3s ease-in-out;
-  box-shadow: 0 0 120px rgba(33, 150, 243, 0.4);
+.checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
 }
 
-.custom-glow-input :deep(.v-field__input) {
-  min-height: 80px !important;
-  padding-top: 12px !important;
-  padding-bottom: 12px !important;
+.custom-checkbox :deep(.v-selection-control) {
+  min-height: auto !important;
+  justify-content: flex-start !important;
+  margin-inline-start: 0 !important;
 }
 
-.custom-glow-input :deep(.v-field--focused) {
-  box-shadow: 0 0 400px v-bind('COLORS.primary') !important;
+.custom-checkbox :deep(.v-selection-control__wrapper) {
+  margin-left: 0 !important;
+  width: auto !important;
+}
+
+.checkbox-label {
+  color: #ffffff;
+  padding-left: 8px;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+}
+
+.settings-btn {
+  color: v-bind('COLORS.primary');
+  padding: 1rem;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.field-wrapper {
+  width: 100%;
+  max-width: 50rem;
 }
 </style>
