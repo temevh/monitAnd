@@ -2,6 +2,7 @@
   import type { News, RedditPost } from '@/types.ts'
 
   import { ref } from 'vue'
+  import { selectedSources } from '@/utils/selectedSources.ts'
   import KeywordInput from './KeywordInput.vue'
   import NewsList from './news/NewsList.vue'
   import RedditList from './reddit/RedditList.vue'
@@ -15,6 +16,7 @@
       return
     }
     console.log('keyword', keyword.value)
+    const sources = selectedSources()
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE}/keyword`, {
         method: 'POST',
@@ -23,6 +25,7 @@
         },
         body: JSON.stringify({
           keyword: keyword.value,
+          sources: sources,
         }),
       })
 

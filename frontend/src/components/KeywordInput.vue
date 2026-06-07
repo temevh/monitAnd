@@ -4,6 +4,7 @@
 
   const keyword = defineModel<string>('keyword', { required: true })
   const emit = defineEmits<{ (e: 'search-pressed'): void }>()
+
   const expanded = ref(false)
 
   const redditSelected = ref(localStorage.getItem('reddit_selected') === 'true')
@@ -12,9 +13,9 @@
 
   const activeSources = computed(() => {
     let count = 0
-    if (redditSelected.value) count += 1
-    if (newsSelected.value) count += 1
-    if (twitterSelected.value) count += 1
+    if (redditSelected.value) count++
+    if (newsSelected.value) count++
+    if (twitterSelected.value) count++
     return count
   })
 
@@ -59,20 +60,22 @@
         @keydown.enter="handleSearch"
       />
 
-      <div>
+      <div class="d-flex align-center justify-space-between mt-2">
         <v-btn class="settings-btn" rounded="xs" @click="expanded = !expanded">
           Settings
           <v-icon end icon="mdi-cog" />
         </v-btn>
 
-        <p v-if="activeSources === 0">Using all sources</p>
-        <p v-if="activeSources === 1">{{ activeSources }} source selected</p>
-        <p v-if="activeSources > 1">{{ activeSources }} sources selected</p>
+        <div class="text-caption text-grey-lighten-1 mt-2">
+          <p v-if="activeSources === 0">Using all sources</p>
+          <p v-else-if="activeSources === 1">{{ activeSources }} source selected</p>
+          <p v-else>{{ activeSources }} sources selected</p>
+        </div>
       </div>
     </div>
 
     <div v-if="expanded" class="settings-div">
-      <p class="text-subtitle-2 font-weight-medium">Select sources to use (leave empty for all)</p>
+      <p class="text-subtitle-2 font-weight-medium mb-3">Select sources to use (leave empty for all)</p>
 
       <div class="checkboxes">
         <v-checkbox
@@ -132,7 +135,8 @@
   background-color: v-bind('COLORS.cardBackground');
   width: 100%;
   max-width: 50rem;
-  padding-left: 20px;
+  padding: 20px;
+  margin-top: 15px;
   color: white;
 }
 
@@ -165,7 +169,6 @@
   color: v-bind('COLORS.primary');
   padding: 1rem;
   font-size: 1rem;
-  margin-top: 10px;
 }
 
 .field-wrapper {
