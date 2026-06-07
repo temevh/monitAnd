@@ -31,8 +31,8 @@
 
       if (response.status === 200) {
         const data = await response.json()
-        newsList.value = data.message.newsData
-        redditPosts.value = data.message.redditPosts
+        newsList.value = data.message.newsData || []
+        redditPosts.value = data.message.redditPosts || []
         hasData.value = true
       } else {
         console.error('Server error', response.status)
@@ -44,9 +44,9 @@
 </script>
 
 <template>
-  <KeywordInput v-if="newsList.length === 0" v-model:keyword="keyword" @search-pressed="searchPressed" />
+  <KeywordInput v-if="!hasData" v-model:keyword="keyword" @search-pressed="searchPressed" />
 
-  <v-container v-if="hasData" id="contentDiv">
+  <v-container v-else id="contentDiv">
     <h1 class="keyword-header">{{ keyword }}</h1>
 
     <v-row>
