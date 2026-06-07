@@ -1,15 +1,45 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
   import { COLORS } from '@/styles'
+
   const keyword = defineModel<string>('keyword', { required: true })
   const emit = defineEmits<{ (e: 'search-pressed'): void }>()
   const expanded = ref(false)
+
+  const redditSelected = ref(localStorage.getItem('reddit_selected') === 'true')
+  const newsSelected = ref(localStorage.getItem('news_selected') === 'true')
+  const twitterSelected = ref(localStorage.getItem('twitter_selected') === 'true')
+
+  const activeSources = computed(() => {
+    let count = 0
+    if (redditSelected.value) count += 1
+    if (newsSelected.value) count += 1
+    if (twitterSelected.value) count += 1
+    return count
+  })
+
   function handleSearch () {
     if (!keyword.value || keyword.value.trim() === '') {
       return
     }
-
     emit('search-pressed')
+  }
+
+  function setRemoveSource (source: string): void {
+    switch (source) {
+      case 'reddit': {
+        localStorage.setItem('reddit_selected', String(redditSelected.value))
+        break
+      }
+      case 'news': {
+        localStorage.setItem('news_selected', String(newsSelected.value))
+        break
+      }
+      case 'twitter': {
+        localStorage.setItem('twitter_selected', String(twitterSelected.value))
+        break
+      }
+    }
   }
 </script>
 
@@ -34,36 +64,46 @@
           Settings
           <v-icon end icon="mdi-cog" />
         </v-btn>
+
+        <p v-if="activeSources === 0">Using all sources</p>
+        <p v-if="activeSources === 1">{{ activeSources }} source selected</p>
+        <p v-if="activeSources > 1">{{ activeSources }} sources selected</p>
       </div>
     </div>
 
     <div v-if="expanded" class="settings-div">
-      <p class="text-subtitle-2 font-weight-medium mb-3">Select sources to use</p>
+      <p class="text-subtitle-2 font-weight-medium">Select sources to use (leave empty for all)</p>
 
       <div class="checkboxes">
         <v-checkbox
+          v-model="redditSelected"
           class="custom-checkbox"
           density="comfortable"
           hide-details
           :style="{ color: COLORS.primary }"
+          @update:model-value="setRemoveSource('reddit')"
         >
           <span class="checkbox-label">REDDIT</span>
         </v-checkbox>
 
         <v-checkbox
+          v-model="newsSelected"
           class="custom-checkbox"
           density="comfortable"
           hide-details
           :style="{ color: COLORS.primary }"
+          @update:model-value="setRemoveSource('news')"
         >
           <span class="checkbox-label">NEWS</span>
         </v-checkbox>
 
         <v-checkbox
+          v-model="twitterSelected"
           class="custom-checkbox"
           density="comfortable"
           hide-details
           :style="{ color: COLORS.primary }"
+          @update:model-value="setRemoveSource('twitter')"
         >
           <span class="checkbox-label font-weight-bold">X / TWITTER</span>
         </v-checkbox>
@@ -92,8 +132,7 @@
   background-color: v-bind('COLORS.cardBackground');
   width: 100%;
   max-width: 50rem;
-  padding: 20px;
-  margin-top: 15px;
+  padding-left: 20px;
   color: white;
 }
 
