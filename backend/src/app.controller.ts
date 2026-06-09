@@ -4,6 +4,7 @@ import { NewsService } from './services/news.service';
 import { RedditService } from './services/reddit.service';
 import { type postBodyDto } from './dto';
 import { News, RedditPost } from './types';
+import { KeywordService } from './services/keyword.service';
 
 @Controller()
 export class AppController {
@@ -11,6 +12,7 @@ export class AppController {
     private readonly appService: AppService,
     private readonly newsService: NewsService,
     private readonly redditService: RedditService,
+    private readonly keywordService: KeywordService,
   ) {}
 
   @Get()
@@ -26,6 +28,7 @@ export class AppController {
     let newsData: News[] = [];
 
     const promises: Promise<any>[] = [];
+    promises.push(this.keywordService.addKeywordToDatabase(keyword));
 
     if (sources.includes('reddit')) {
       promises.push(

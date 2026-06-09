@@ -6,6 +6,7 @@ import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 import { RedditService } from './services/reddit.service';
 import { SupabaseModule } from './supabase.module';
+import { KeywordService } from './services/keyword.service';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { SupabaseModule } from './supabase.module';
     SupabaseModule,
   ],
   controllers: [AppController],
-  providers: [AppService, NewsService, RedditService],
+  providers: [AppService, NewsService, RedditService, KeywordService],
 })
 export class AppModule {}
