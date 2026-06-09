@@ -5,6 +5,7 @@ import { NewsService } from './services/news.service';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 import { RedditService } from './services/reddit.service';
+import { SupabaseModule } from './supabase.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { RedditService } from './services/reddit.service';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    SupabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService, NewsService, RedditService],
