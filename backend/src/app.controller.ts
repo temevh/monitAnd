@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { NewsService } from './services/news.service';
 import { RedditService } from './services/reddit.service';
-import { type postBodyDto } from './dto';
+import { type KeywordData, type postBodyDto } from './dto';
 import { News, RedditPost } from './types';
 import { KeywordService } from './services/keyword.service';
 
@@ -26,26 +26,35 @@ export class AppController {
     const { keyword, sources } = postBody;
     let redditPosts: RedditPost[] = [];
     let newsData: News[] = [];
+    let keywordData: KeywordData | null = null;
+    const keywordLowered = keyword.toLowerCase();
 
     const promises: Promise<any>[] = [];
-    promises.push(this.keywordService.addKeywordToDatabase(keyword));
+    promises.push(this.keywordService.addKeywordToDatabase(keywordLowered));
+    promises.push(
+      this.keywordService
+        .getKeywordData(keywordLowered)
+        .then((res) => (keywordData = res)),
+    );
 
     if (sources.includes('reddit')) {
       promises.push(
         this.redditService
-          .getReddit(keyword)
+          .getReddit(keywordLowered)
           .then((res) => (redditPosts = res)),
       );
     }
 
     if (sources.includes('news')) {
       promises.push(
-        this.newsService.getNews(keyword).then((res) => (newsData = res)),
+        this.newsService
+          .getNews(keywordLowered)
+          .then((res) => (newsData = res)),
       );
     }
 
     await Promise.all(promises);
 
-    return { message: { newsData, redditPosts } };
+    return { message: { newsData, redditPosts, keywordData } };
   }
 }

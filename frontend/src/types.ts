@@ -14,3 +14,14 @@ export type RedditPost = {
   subreddit: string
   date: string
 }
+
+export type KeywordData = {
+  keyword: string
+  search_count: number
+  last_searched_at: string
+  search_logs: SearchLogItem[]
+}
+
+type SearchLogItem = {
+  searched_at: string
+}

@@ -37,7 +37,6 @@ export class RedditService {
 
       const feed = await this.rssParser.parseString(response.data);
       const items: RedditRssItem[] = feed.items || [];
-      console.log(items);
 
       const junkRemoved = items.filter((item) => {
         return item.link.length > 60;
