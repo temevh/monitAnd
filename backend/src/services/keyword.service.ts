@@ -22,6 +22,7 @@ export class KeywordService {
       .select(
         'keyword, search_count, last_searched_at, search_logs (searched_at)',
       )
+      .order('searched_at', { foreignTable: 'search_logs', ascending: true })
       .eq('keyword', keyword)
       .maybeSingle();
     console.log('getKeywordData raw payload:', data);

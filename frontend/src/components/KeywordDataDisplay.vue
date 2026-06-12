@@ -7,42 +7,44 @@
   const period = ref('monthly')
 
   const chartData = computed(() => {
-    const dailyCounts: Record<string, number> = {}
     const handledData = props.data.search_logs
+    if (!handledData || handledData.length === 0) {
+      return { labels: [], values: [] }
+    }
+
+    const counts: Record<string, number> = {}
     if (period.value === 'weekly') {
-      console.log('handledData', handledData)
-      for (const date of handledData) {
-        console.log(moment(new Date(date.searched_at)).week())
+      for (const log of handledData) {
+        const momentDate = moment(log.searched_at)
+        const weekNumber = momentDate.week()
+        const year = momentDate.year()
+
+        const weekLabel = `W ${weekNumber} (${year})`
+        counts[weekLabel] = (counts[weekLabel] || 0) + 1
+      }
+    } else if (period.value === 'monthly') {
+      for (const log of handledData) {
+        const normalizedDate = new Date(log.searched_at).toLocaleDateString(undefined, {
+          month: 'short',
+          day: 'numeric',
+        })
+        counts[normalizedDate] = (counts[normalizedDate] || 0) + 1
       }
     }
-    for (const log of handledData) {
-      const normalizedDate = new Date(log.searched_at).toLocaleDateString(undefined, {
-        month: 'short',
-        day: 'numeric',
-      })
-      dailyCounts[normalizedDate] = (dailyCounts[normalizedDate] || 0) + 1
-    }
 
-    const sortedLabels = Object.keys(dailyCounts).sort(
-      (a, b) => new Date(a).getTime() - new Date(b).getTime(),
-    )
-
-    const sortedValues = sortedLabels.map(date => dailyCounts[date])
+    const labels = Object.keys(counts)
+    const values = labels.map(label => counts[label])
 
     return {
-      labels: sortedLabels,
-      values: sortedValues,
+      labels: labels,
+      values: values,
     }
   })
 </script>
 
 <template>
   <v-card class="mx-auto text-center rounded-0 pa-4" color="#0f141c" max-width="600" theme="dark">
-    <v-card-item title="INTEREST OVER TIME">
-      <template #subtitle>
-        Tracking activity loops for: <strong :style="{ color: COLORS.primary }">{{ props.data.phrase }}</strong>
-      </template>
-    </v-card-item>
+    <v-card-item title="INTEREST OVER TIME" />
 
     <v-btn-toggle
       v-model="period"
