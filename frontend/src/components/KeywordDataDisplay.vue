@@ -3,7 +3,9 @@
   import moment from 'moment'
   import { computed, ref } from 'vue'
   import { COLORS } from '@/styles'
+
   const props = defineProps<{ data: KeywordData }>()
+  const hoveredIndex = ref<number | null>(null)
   const period = ref('monthly')
 
   const chartData = computed(() => {
@@ -43,7 +45,7 @@
 </script>
 
 <template>
-  <v-card class="mx-auto text-center rounded-0 pa-4" color="#0f141c" max-width="600" theme="dark">
+  <v-card class="mx-auto text-center rounded-0 pa-4 position-relative" color="#0f141c" max-width="600" theme="dark">
     <v-card-item title="INTEREST OVER TIME" />
 
     <v-btn-toggle
@@ -59,18 +61,33 @@
       <v-btn value="all">All-time</v-btn>
     </v-btn-toggle>
 
+    <div
+      v-if="hoveredIndex !== null && chartData.labels[hoveredIndex]"
+      class="custom-spark-tooltip"
+    >
+      <div class="tooltip-label">{{ chartData.labels[hoveredIndex] }}</div>
+
+      <div class="tooltip-value">
+        <strong>{{ chartData.values[hoveredIndex] }}</strong> searches
+      </div>
+    </div>
+
     <v-card-text>
       <v-sparkline
         auto-draw
         :auto-draw-duration="2000"
         :color="COLORS.primary"
         height="100"
+        interactive
         :labels="chartData.labels"
         line-width="2"
         :model-value="chartData.values"
         padding="24"
+        show-markers
         smooth
         stroke-linecap="round"
+        @mouseenter:data="({ index }) => hoveredIndex = index"
+        @mouseleave="hoveredIndex = null"
       >
         <template #label="item">
           {{ item.value }}
@@ -88,9 +105,36 @@
 </template>
 
 <style scoped>
+.custom-spark-tooltip {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  z-index: 10;
+  background-color: #1e293b;
+  border: 1px solid v-bind('COLORS.primary');
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  text-align: left;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.tooltip-label {
+  color: #94a3b8;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tooltip-value {
+  margin-top: 2px;
+}
+
 :deep(.v-sparkline__labels text) {
   font-size: 4px !important;
   fill: rgba(255, 255, 255, 0.7) !important;
-  font-weight: 500;
 }
 </style>
